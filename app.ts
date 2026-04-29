@@ -1,9 +1,10 @@
 import express, {Request, Response} from 'express';
 import routes from './routes/index';
 import { sequelize } from './config/sequelize';
+require('dotenv').config()
 
 const app = express();
-const port = 5000;
+const port = process.env.port || 3000;
 
 app.use(express.json());
 app.use(routes);
