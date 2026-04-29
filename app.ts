@@ -1,7 +1,7 @@
 import express, {Request, Response} from 'express';
 import routes from './routes/index';
 import { sequelize } from './config/sequelize';
-require('dotenv').config()
+require('dotenv').config();
 
 const app = express();
 const port = process.env.port || 3000;
