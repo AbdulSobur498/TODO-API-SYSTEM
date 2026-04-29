@@ -10,8 +10,7 @@ export const createTodo =  async ( req:Request, res:Response) => {
         const data = matchedData(req);
         const newTodo = await Task.create(data);
         return res.status(201).send({msg: 'Todo successfully added', newTodo});
-    } catch (error) {
-        console.log(error)
+    } catch (error:any) {
         res.status(500).json({ error: error.message });
     }
     
@@ -32,7 +31,7 @@ export const getAllTodo = async (req:Request, res:Response) => {
     try {
         const todos = await Task.findAll({ where: whereClause });
         return res.status(200).json(todos);
-    } catch (error) {
+    } catch (error:any) {
         return res.status(500).json({ error: "Filtering failed. Check your column names." });
     }
 };
@@ -43,7 +42,7 @@ export const getTodo = async (req:Request, res:Response) => {
         const findTodo = await Task.findOne({where: { id : findTodoIndex }});
         if (!findTodoIndex) return res.status(404).send({msg:'Bad Request Invalid ID'})
         return res.status(200).send(findTodo);
-    } catch (error) {
+    } catch (error:any) {
         res.status(500).json({ error: error.message });
     }
     
@@ -54,7 +53,7 @@ export const updateTodoCom = async (req:Request, res:Response) => {
         const { body, findTodoIndex } = req;
         const updateTodo = await Task.update({ ...body }, { where: { id : findTodoIndex } });
         return res.send('updateTodo');
-    } catch (error) {
+    } catch (error:any) {
         res.status(500).json({ error: error.message });
     }
     
@@ -70,7 +69,7 @@ export const updateTodo = async (req:Request, res:Response) => {
         }
         const updateTodo = await Task.update(  {...findTodo, ...body}, {where: { id: findTodoIndex}});
         return res.send(updateTodo)
-    } catch (error) {
+    } catch (error:any) {
         res.status(500).json({ error: error.message });
     }
 };
@@ -80,7 +79,7 @@ export const deleteTodo = async (req:Request, res:Response) => {
         const { findTodoIndex } = req;
         const deleteTodo = await Task.destroy({ where: { id: findTodoIndex }})
         return res.send({ msg: 'Todo successfully deleted'});
-    } catch (error) {
+    } catch (error:any) {
         res.status(500).json({ error: error.message });
     }
     

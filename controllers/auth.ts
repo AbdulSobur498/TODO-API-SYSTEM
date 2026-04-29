@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../models/index';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 require('dotenv').config();
 
@@ -29,26 +29,33 @@ export const registerUser = async (req:Request, res:Response) => {
 };
 
 export const loginUser = async (req:Request, res:Response) => {
-    const { email, password } = req.body
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
 
-    const user = await User.findOne({where: { email }});
+if (!user) {
+    return res.status(401).json({ error: "Invalid email or password" });
+}
 
-    if (!user) {
-        res.status(404).send('Bad request');
-    }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-        return res.send('Invalid password');
-    }
+if (!isPasswordValid) {
+    return res.status(401).json({ error: "Invalid email or password" });
+}
 
-    const token = jwt.sign({id: user.id}, process.env.JWT_SECRET as string , 
-        {expiresIn: '1d'})
 
-        res.send(200).json({user: {
+const token = jwt.sign(
+    { id: user.id }, 
+    process.env.JWT_SECRET as string, 
+    { expiresIn: '1d' }
+);
+
+return res.status(200).json({
+    token,
+    user: {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email, 
-        }, token})
+        email: user.email
+    }
+});
 }

@@ -1,12 +1,14 @@
-import {DataTypes, Model} from 'sequelize'
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import { sequelize } from '../config/sequelize'
 
-class User extends Model {
-    id?:number;
-    firstName?:string
-    lastName?:string
-    email?:string
-    password?:string
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+        declare id: CreationOptional<number>;
+        declare firstName: string;
+        declare lastName: string;
+        declare email: string;
+        declare password: string;
+        declare createdAt: CreationOptional<Date>;
+        declare updatedAt: CreationOptional<Date>;
 }
 
 User.init({
@@ -51,4 +53,4 @@ User.init({
 })
 
 
-export default User
+export default User;

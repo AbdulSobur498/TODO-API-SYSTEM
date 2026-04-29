@@ -20,4 +20,4 @@ export const resolveTodoIndexById = (req:Request, res:Response, next:NextFunctio
 
      req.findTodoIndex = findTodoIndex;
     next();
-}
+};
